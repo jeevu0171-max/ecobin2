@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoBin - Smart Waste Management System</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="EcoBin is an IoT-based Smart City Waste Management System with real-time dustbin monitoring, GPS collection dispatch routing, and automated municipal alerts.">
+  
+  <!-- FontAwesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="./EcoBin - Smart Waste Management System_files/all.min.css">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="./EcoBin - Smart Waste Management System_files/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  
+  <!-- Custom Style System -->
+  <link rel="stylesheet" href="./EcoBin - Smart Waste Management System_files/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. Collapsible Sidebar Navigation -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-brand">
+        <h1><i class="fas fa-recycle"></i> EcoBin</h1>
+        <span data-i18n="smart_city_initiative" data-i18n-original="SMART CITY INITIATIVE">SMART CITY INITIATIVE</span>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li class=""><a href="http://127.0.0.1:5500/index.html#intro-screen" data-navigate="intro-screen"><i class="fas fa-home"></i> <span data-i18n="welcome_portal" data-i18n-original="Welcome Portal">Welcome Portal</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#login-screen" data-navigate="login-screen"><i class="fas fa-sign-in-alt"></i> <span data-i18n="portal_login" data-i18n-original="Portal Login">Portal Login</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#dashboard-screen" data-navigate="dashboard-screen"><i class="fas fa-chart-line"></i> <span data-i18n="dashboard" data-i18n-original="Dashboard">Dashboard</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#digital-twin-screen"><i class="fas fa-cube"></i> <span data-i18n="digital_twin" data-i18n-original="Digital Twin 3D">Digital Twin 3D</span></a></li>
+        <li><a href="http://127.0.0.1:5500/index.html#map-screen" data-navigate="map-screen"><i class="fas fa-map-marked-alt"></i> <span data-i18n="live_bin_map" data-i18n-original="Live Bin Map">Live Bin Map</span></a></li>
+
+        <li><a href="http://127.0.0.1:5500/index.html#bin-details-screen" data-navigate="bin-details-screen"><i class="fas fa-info-circle"></i> <span data-i18n="bin_details" data-i18n-original="Bin Details">Bin Details</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#alerts-screen" data-navigate="alerts-screen"><i class="fas fa-bell"></i> <span data-i18n="alerts_center" data-i18n-original="Alerts Center">Alerts Center</span></a></li>
+        <li><a href="http://127.0.0.1:5500/index.html#route-tracking-screen" data-navigate="route-tracking-screen"><i class="fas fa-route"></i> <span data-i18n="route_tracking" data-i18n-original="Route Tracking">Route Tracking</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#worker-screen"><i class="fas fa-id-badge"></i> <span data-i18n="worker_panel" data-i18n-original="Worker Panel">Worker Panel</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#rewards-screen"><i class="fas fa-trophy"></i> <span data-i18n="citizen_rewards" data-i18n-original="Citizen Rewards">Citizen Rewards</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#reports-screen" data-navigate="reports-screen"><i class="fas fa-camera"></i> <span data-i18n="citizen_reports_sidebar" data-i18n-original="Citizen Reports">Citizen Reports</span></a></li>
+        <li class=""><a href="http://127.0.0.1:5500/index.html#analytics-screen" data-navigate="analytics-screen"><i class="fas fa-chart-pie"></i> <span data-i18n="data_analytics" data-i18n-original="Data Analytics">Data Analytics</span></a></li>
+        <li class="active"><a href="http://127.0.0.1:5500/index.html#admin-screen" data-navigate="admin-screen"><i class="fas fa-user-cog"></i> <span data-i18n="admin_control" data-i18n-original="Admin Control">Admin Control</span></a></li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <strong data-i18n="govt_of_karnataka" data-i18n-original="Govt. of Karnataka">Govt. of Karnataka</strong><br>
+        <span data-i18n="municipal_waste_simulation" data-i18n-original="Municipal Waste Simulation">Municipal Waste Simulation</span><br>
+        <span style="font-size: 0.65rem; color: var(--neon-blue);">v1.4.0 IoT Active</span>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+      
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" id="sidebar-toggle" onclick="document.getElementById(&#39;app-sidebar&#39;).classList.toggle(&#39;mobile-open&#39;)">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <!-- Global Search Bar -->
+          <div class="global-search-container" style="margin-left: 12px; margin-right: 12px;">
+            <i class="fas fa-search global-search-icon"></i>
+            <input type="text" id="global-search" class="form-control global-search-input" placeholder="Search bin, worker, alert..." data-i18n-placeholder="Search bin, worker, alert..." data-i18n-original-placeholder="Search bin, worker, alert...">
+          </div>
+
+          <!-- Live Weather Widget -->
+          <div class="weather-widget" style="margin-right: 12px;">
+            <i class="fas fa-sun weather-sun" id="weather-icon"></i>
+            <span id="weather-desc"><strong>Clear</strong> | 29°C</span>
+          </div>
+
+          <!-- Simulation Quick Controls -->
+          <div class="simulator-panel">
+            <span class="simulator-label"><i class="fas fa-cogs"></i> <span data-i18n="simulator" data-i18n-original="SIMULATOR">SIMULATOR</span></span>
+            <button class="sim-btn" id="btn-sim-trigger" title="Force fill a random bin above 80% threshold"><i class="fas fa-bolt"></i> <span data-i18n="trigger_alert" data-i18n-original="Trigger Alert">Trigger Alert</span></button>
+            <button class="sim-btn danger-btn" id="btn-sim-reset" title="Reset all data to defaults"><i class="fas fa-undo"></i> <span data-i18n="reset" data-i18n-original="Reset">Reset</span></button>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          
+          <!-- Language Selector -->
+          <div class="language-selector" style="display: flex; align-items: center;">
+            <select id="lang-select" class="form-control" style="width: 140px; background: rgba(20, 24, 33, 0.8); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; font-family: var(--font-family); outline: none;">
+              <option value="en">English</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+          </div>
+
+          <!-- Notification Bell Dropdown -->
+          <div class="notification-bell" id="notif-bell">
+            <i class="fas fa-bell"></i>
+            <span class="bell-badge" id="notif-badge">3</span>
+            
+            <div class="notification-dropdown" id="notif-dropdown" style="display: none;">
+              <div class="notification-header">
+                <span>System Alerts</span>
+                <span class="badge badge-red">Active</span>
+              </div>
+              <ul class="notification-list" id="notifications-list-box">
+        <li class="notif-box-item">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-bell" style="width:20px;"></i>
+            <span class="badge badge-gray">System</span>
+          </div>
+          <p class="notif-msg">EcoBin Platform Advanced Features initialized.</p>
+          <span class="notif-time">Just Now</span>
+        </li>
+      
+        <li class="notif-box-item">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-exclamation-circle" style="width:20px;"></i>
+            <span class="badge badge-red">Emergency</span>
+          </div>
+          <p class="notif-msg">Automatic 95% Emergency dispatch protocol active.</p>
+          <span class="notif-time">1 min ago</span>
+        </li>
+      
+        <li class="notif-box-item">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-sms" style="width:20px;"></i>
+            <span class="badge badge-blue">Route</span>
+          </div>
+          <p class="notif-msg">TRUCK-KA-10 routing optimized via NH-27.</p>
+          <span class="notif-time">5 mins ago</span>
+        </li>
+      
+        <li class="notif-box-item">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-envelope" style="width:20px;"></i>
+            <span class="badge badge-yellow">Report</span>
+          </div>
+          <p class="notif-msg">Citizen report #REP-101 assigned to worker Suresh Naik.</p>
+          <span class="notif-time">10 mins ago</span>
+        </li>
+      </ul>
+              <div class="notification-footer">
+                <a href="http://127.0.0.1:5500/index.html#alerts-screen" data-navigate="alerts-screen">View All Alerts</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Session Widget -->
+          <div class="user-profile">
+            <div class="user-avatar" id="profile-avatar">GA</div>
+            <div class="user-info">
+              <span class="user-name" id="profile-name">GOVT ADMIN</span>
+              <span class="user-role" id="profile-role">Administrator</span>
+            </div>
+          </div>
+          
+        </div>
+      </header>
+
+      <!-- Content viewport area -->
+      <section class="content-area">
+
+        <!-- ==============================================
+             1. INTRODUCTION SCREEN
+             ============================================== -->
+        <div class="app-screen" id="intro-screen">
+          <div class="intro-page-layout">
+            <div class="intro-hero" style="background: linear-gradient(rgba(8, 9, 12, 0.85), rgba(8, 9, 12, 0.95)), url(&#39;https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&amp;fit=crop&amp;w=1600&amp;q=80&#39;) center/cover;">
+              <div class="intro-hero-content">
+                <div class="intro-badge" data-i18n="smart_city_initiative" data-i18n-original="SMART CITY INITIATIVE">SMART CITY INITIATIVE</div>
+                <h1 data-i18n="cleaner_cities" data-i18n-original="Smart Waste Management for Cleaner Cities">Smart Waste Management for Cleaner Cities</h1>
+                <p data-i18n="cleaner_cities_desc" data-i18n-original="Real-Time Monitoring, Intelligent Collection, and Automated Municipal Alerts powered by IoT and GPS Navigation.">Real-Time Monitoring, Intelligent Collection, and Automated Municipal Alerts powered by IoT and GPS Navigation.</p>
+              </div>
+              <div class="intro-cta">
+                <button class="btn-primary" id="intro-btn-started"><span data-i18n="get_started" data-i18n-original="Get Started">Get Started</span> <i class="fas fa-arrow-right"></i></button>
+                <button class="btn-secondary" id="intro-btn-login" data-i18n="login_access" data-i18n-original="Login Access">Login Access</button>
+                <button class="btn-secondary" id="intro-btn-more" data-i18n="learn_more" data-i18n-original="Learn More">Learn More</button>
+              </div>
+            </div>
+
+            <div class="intro-grid">
+              
+              <!-- Problem Section -->
+              <div class="glass-card problem-card">
+                <h3><i class="fas fa-exclamation-circle"></i> <span data-i18n="urban_problems" data-i18n-original="Urban Waste Problems">Urban Waste Problems</span></h3>
+                <ul class="intro-list">
+                  <li>
+                    <i class="fas fa-trash-alt"></i>
+                    <div>
+                      <div class="title" data-i18n="overflow_bins" data-i18n-original="Overflowing Dustbins">Overflowing Dustbins</div>
+                      <p data-i18n="overflow_bins_desc" data-i18n-original="Public bins overflow, causing garbage spillages on walkways and streets before collection trucks arrive.">Public bins overflow, causing garbage spillages on walkways and streets before collection trucks arrive.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-clock"></i>
+                    <div>
+                      <div class="title" data-i18n="delayed_collection" data-i18n-original="Delayed Waste Collection">Delayed Waste Collection</div>
+                      <p data-i18n="delayed_collection_desc" data-i18n-original="Fixed-schedule collections lead to fuel wastage for empty bins, while overflowing ones remain unaddressed.">Fixed-schedule collections lead to fuel wastage for empty bins, while overflowing ones remain unaddressed.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-smog"></i>
+                    <div>
+                      <div class="title" data-i18n="env_pollution" data-i18n-original="Environmental Pollution">Environmental Pollution</div>
+                      <p data-i18n="env_pollution_desc" data-i18n-original="Unattended toxic wastes attract rodents and pollute aquifers, degrading quality of life in cities.">Unattended toxic wastes attract rodents and pollute aquifers, degrading quality of life in cities.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-briefcase-medical"></i>
+                    <div>
+                      <div class="title" data-i18n="health_concerns" data-i18n-original="Public Health Concerns">Public Health Concerns</div>
+                      <p data-i18n="health_concerns_desc" data-i18n-original="Open composting triggers disease vectors, foul odor, and microbial spread in densely populated zones.">Open composting triggers disease vectors, foul odor, and microbial spread in densely populated zones.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Solution Section -->
+              <div class="glass-card solution-card">
+                <h3><i class="fas fa-check-circle"></i> <span data-i18n="smart_solution" data-i18n-original="The EcoBin Smart Solution">The EcoBin Smart Solution</span></h3>
+                <ul class="intro-list">
+                  <li>
+                    <i class="fas fa-microchip"></i>
+                    <div>
+                      <div class="title" data-i18n="iot_bins" data-i18n-original="IoT Smart Bins">IoT Smart Bins</div>
+                      <p data-i18n="iot_bins_desc" data-i18n-original="Bins continuously measure fill levels and report data to central clouds via wireless sensors.">Bins continuously measure fill levels and report data to central clouds via wireless sensors.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                      <div class="title" data-i18n="gps_tracking" data-i18n-original="GPS Tracking">GPS Tracking</div>
+                      <p data-i18n="gps_tracking_desc" data-i18n-original="Real-time GPS tracking pairs filled bins with nearby municipal collectors automatically.">Real-time GPS tracking pairs filled bins with nearby municipal collectors automatically.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-sms"></i>
+                    <div>
+                      <div class="title" data-i18n="auto_alerts" data-i18n-original="Automated Alerts">Automated Alerts</div>
+                      <p data-i18n="auto_alerts_desc" data-i18n-original="Crossing the 80% threshold alerts nearest drivers via instant SMS coordinates and dashboard alerts.">Crossing the 80% threshold alerts nearest drivers via instant SMS coordinates and dashboard alerts.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="fas fa-project-diagram"></i>
+                    <div>
+                      <div class="title" data-i18n="route_opt" data-i18n-original="Smart Route Optimization">Smart Route Optimization</div>
+                      <p data-i18n="route_opt_desc" data-i18n-original="Shortest route paths are plotted dynamically to cut down on response windows and reduce fuel use.">Shortest route paths are plotted dynamically to cut down on response windows and reduce fuel use.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             2. PORTAL LOGIN SCREEN
+             ============================================== -->
+        <div class="app-screen" id="login-screen">
+          <div class="login-screen-wrapper" style="background: linear-gradient(rgba(8,9,12,0.7), rgba(8,9,12,0.9)), url(&#39;https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&amp;fit=crop&amp;w=800&amp;q=80&#39;) center/cover; padding: 40px; border-radius: var(--border-radius); border:1px solid var(--border-color);">
+            <div class="login-card">
+              <div class="login-header">
+                <h2 data-i18n="sys_auth" data-i18n-original="System Authentication">System Authentication</h2>
+                <p data-i18n="access_portal" data-i18n-original="Access the Karnataka Municipal Waste Portal">Access the Karnataka Municipal Waste Portal</p>
+              </div>
+
+              <div class="login-options">
+                <button class="login-option-btn active" data-role="Admin" data-i18n="admin_login" data-i18n-original="Admin Login">Admin Login</button>
+                <button class="login-option-btn" data-role="Staff" data-i18n="staff_login" data-i18n-original="Municipal Staff">Municipal Staff</button>
+                <button class="login-option-btn" data-role="Citizen" data-i18n="citizen_login" data-i18n-original="Citizen Portal">Citizen Portal</button>
+              </div>
+
+              <form id="form-login">
+                <div class="form-group">
+                  <label for="login-email" data-i18n="email_addr" data-i18n-original="Email Address">Email Address</label>
+                  <input type="email" id="login-email" class="form-control" placeholder="username@karnataka.gov.in" required="" value="admin@karnataka.gov.in">
+                </div>
+
+                <div class="form-group">
+                  <label for="login-password" data-i18n="secret_pin" data-i18n-original="Secret Pin / Password">Secret Pin / Password</label>
+                  <input type="password" id="login-password" class="form-control" placeholder="••••••••" required="" value="12345">
+                </div>
+
+                <div class="remember-forgot">
+                  <label class="checkbox-label">
+                    <input type="checkbox" checked=""> <span data-i18n="remember_me" data-i18n-original="Remember Me">Remember Me</span>
+                  </label>
+                  <a href="http://127.0.0.1:5500/index.html#" data-i18n="forgot_pwd" data-i18n-original="Forgot Password?">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;" data-i18n="auth_session" data-i18n-original="Authenticate Session">Authenticate Session</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             3. DASHBOARD SCREEN
+             ============================================== -->
+        <div class="app-screen" id="dashboard-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-chart-line"></i> <span data-i18n="dashboard_hub" data-i18n-original="Dashboard Hub">Dashboard Hub</span></h2>
+            <p class="screen-subtitle" data-i18n="dashboard_subtitle" data-i18n-original="Real-time status overview of Mandya IoT networks.">Real-time status overview of Mandya IoT networks.</p>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="stats-grid">
+            <div class="glass-card stats-card">
+              <div class="stats-header"><span data-i18n="total_bins" data-i18n-original="Total Bins">Total Bins</span> <i class="fas fa-trash-alt" style="color:var(--neon-blue);"></i></div>
+              <div class="stats-value" id="stat-total-bins">8</div>
+              <div class="stats-footer" data-i18n="sensors_active" data-i18n-original="IoT Sensors Active">IoT Sensors Active</div>
+            </div>
+            <div class="glass-card stats-card glow-red">
+              <div class="stats-header"><span data-i18n="bins_above_80" data-i18n-original="Bins Above 80%">Bins Above 80%</span> <i class="fas fa-exclamation-triangle" style="color:var(--neon-red);"></i></div>
+              <div class="stats-value" id="stat-high-bins" style="color:var(--neon-red);">3</div>
+              <div class="stats-footer" data-i18n="need_clearance" data-i18n-original="Need immediate clearing">Need immediate clearing</div>
+            </div>
+            <div class="glass-card stats-card glow-yellow">
+              <div class="stats-header"><span data-i18n="active_alerts" data-i18n-original="Active Alerts">Active Alerts</span> <i class="fas fa-bell" style="color:var(--neon-yellow);"></i></div>
+              <div class="stats-value" id="stat-active-alerts" style="color:var(--neon-yellow);">4</div>
+              <div class="stats-footer" data-i18n="logs_open" data-i18n-original="System logs open">System logs open</div>
+            </div>
+            <div class="glass-card stats-card glow-green">
+              <div class="stats-header"><span data-i18n="vehicles_out" data-i18n-original="Vehicles Out">Vehicles Out</span> <i class="fas fa-truck-moving" style="color:var(--neon-green);"></i></div>
+              <div class="stats-value" id="stat-active-trucks" style="color:var(--neon-green);">3</div>
+              <div class="stats-footer" data-i18n="en_route" data-i18n-original="En route or collecting">En route or collecting</div>
+            </div>
+            <div class="glass-card stats-card">
+              <div class="stats-header"><span data-i18n="citizen_reports" data-i18n-original="Citizen Reports">Citizen Reports</span> <i class="fas fa-file-invoice" style="color:var(--text-secondary);"></i></div>
+              <div class="stats-value" id="stat-pending-reports">1</div>
+              <div class="stats-footer" data-i18n="pending_res" data-i18n-original="Pending resolution">Pending resolution</div>
+            </div>
+            <div class="glass-card stats-card">
+              <div class="stats-header"><span data-i18n="completed" data-i18n-original="Completed">Completed</span> <i class="fas fa-check-double" style="color:var(--neon-blue);"></i></div>
+              <div class="stats-value" id="stat-completed-collections">5</div>
+              <div class="stats-footer" data-i18n="cycles_today" data-i18n-original="Cycles today">Cycles today</div>
+            </div>
+          </div>
+
+          <!-- AI Prediction Panel -->
+          <div class="dashboard-layout" style="margin-bottom: 24px;">
+            <!-- Prediction Overview Card -->
+            <div class="glass-card" style="grid-column: span 2; display:flex; flex-direction:column; justify-content:space-between; padding:16px;">
+              <div>
+                <h3 class="card-title" style="margin-bottom:12px;"><i class="fas fa-brain"></i> AI Machine Learning Predictions</h3>
+                <div id="ai-prediction-cards" class="predictions-grid">
+      <div class="glass-card pred-card">
+        <div class="pred-header">
+          <strong>BIN-KA-02</strong>
+          <span class="pred-confidence">91% Confidence</span>
+        </div>
+        <div class="pred-body">
+          <div>Location: Subhash Nagar</div>
+          <div class="pred-alert-text"><i class="fas fa-exclamation-triangle"></i> Predicted Overflow in ~10 hours</div>
+        </div>
+      </div>
+    
+      <div class="glass-card pred-card">
+        <div class="pred-header">
+          <strong>BIN-KA-03</strong>
+          <span class="pred-confidence">92% Confidence</span>
+        </div>
+        <div class="pred-body">
+          <div>Location: Ashok Nagar</div>
+          <div class="pred-alert-text"><i class="fas fa-exclamation-triangle"></i> Predicted Overflow in ~13 hours</div>
+        </div>
+      </div>
+    
+      <div class="glass-card pred-card">
+        <div class="pred-header">
+          <strong>BIN-KA-05</strong>
+          <span class="pred-confidence">95% Confidence</span>
+        </div>
+        <div class="pred-body">
+          <div>Location: Hosahalli</div>
+          <div class="pred-alert-text"><i class="fas fa-exclamation-triangle"></i> Predicted Overflow in ~19 hours</div>
+        </div>
+      </div>
+    </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Grid -->
+          <div class="dashboard-grid-widgets">
+            
+            <!-- Live Bin List Widget -->
+            <div class="glass-card" style="background: linear-gradient(rgba(20,24,33,0.8), rgba(20,24,33,0.9)), url(&#39;https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&amp;fit=crop&amp;w=400&amp;q=80&#39;) center/cover;">
+              <h3 class="card-title"><i class="fas fa-desktop"></i> <span data-i18n="live_bin_mon" data-i18n-original="Live Bin Monitoring">Live Bin Monitoring</span></h3>
+              <div class="table-container">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="bin_id" data-i18n-original="Bin ID">Bin ID</th>
+                      <th data-i18n="location" data-i18n-original="Location">Location</th>
+                      <th data-i18n="fill_level" data-i18n-original="Fill Level">Fill Level</th>
+                      <th data-i18n="waste_type" data-i18n-original="Waste Type">Waste Type</th>
+                      <th data-i18n="action" data-i18n-original="Action">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-bins-tbody">
+          <tr>
+            <td><strong>BIN-KA-01</strong></td>
+            <td>VV Nagar</td>
+            <td>
+              <span class="badge badge-yellow">51%</span>
+            </td>
+            <td>Organic</td>
+            <td>
+              <button class="sim-btn" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-01&#39;)">View</button>
+              <button class="sim-btn" style="border-color:var(--neon-blue); color:var(--neon-blue);" onclick="openQRScanner(&#39;BIN-KA-01&#39;)" title="Scan QR Code"><i class="fas fa-qrcode"></i></button>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>BIN-KA-02</strong></td>
+            <td>Subhash Nagar</td>
+            <td>
+              <span class="badge badge-red">81%</span>
+            </td>
+            <td>Plastic</td>
+            <td>
+              <button class="sim-btn" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-02&#39;)">View</button>
+              <button class="sim-btn" style="border-color:var(--neon-blue); color:var(--neon-blue);" onclick="openQRScanner(&#39;BIN-KA-02&#39;)" title="Scan QR Code"><i class="fas fa-qrcode"></i></button>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>BIN-KA-03</strong></td>
+            <td>Ashok Nagar</td>
+            <td>
+              <span class="badge badge-red">82%</span>
+            </td>
+            <td>E-Waste</td>
+            <td>
+              <button class="sim-btn" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-03&#39;)">View</button>
+              <button class="sim-btn" style="border-color:var(--neon-blue); color:var(--neon-blue);" onclick="openQRScanner(&#39;BIN-KA-03&#39;)" title="Scan QR Code"><i class="fas fa-qrcode"></i></button>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>BIN-KA-04</strong></td>
+            <td>Gutalu Road</td>
+            <td>
+              <span class="badge badge-green">27%</span>
+            </td>
+            <td>Hazardous</td>
+            <td>
+              <button class="sim-btn" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-04&#39;)">View</button>
+              <button class="sim-btn" style="border-color:var(--neon-blue); color:var(--neon-blue);" onclick="openQRScanner(&#39;BIN-KA-04&#39;)" title="Scan QR Code"><i class="fas fa-qrcode"></i></button>
+            </td>
+          </tr>
+        
+          <tr>
+            <td><strong>BIN-KA-05</strong></td>
+            <td>Hosahalli</td>
+            <td>
+              <span class="badge badge-red">88%</span>
+            </td>
+            <td>Organic</td>
+            <td>
+              <button class="sim-btn" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-05&#39;)">View</button>
+              <button class="sim-btn" style="border-color:var(--neon-blue); color:var(--neon-blue);" onclick="openQRScanner(&#39;BIN-KA-05&#39;)" title="Scan QR Code"><i class="fas fa-qrcode"></i></button>
+            </td>
+          </tr>
+        </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Real-Time Alerts Summary -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-bolt" style="color:var(--neon-red);"></i> <span data-i18n="real_time_alerts" data-i18n-original="Real-Time Alerts">Real-Time Alerts</span></h3>
+              <div class="table-container">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="priority" data-i18n-original="Priority">Priority</th>
+                      <th data-i18n="issue" data-i18n-original="Issue">Issue</th>
+                      <th data-i18n="location" data-i18n-original="Location">Location</th>
+                      <th data-i18n="status" data-i18n-original="Status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-alerts-tbody">
+        <tr>
+          <td><span class="badge badge-red">High</span></td>
+          <td>Bin Above 80%</td>
+          <td>Subhash Nagar </td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><span class="badge badge-red">High</span></td>
+          <td>Bin Above 80%</td>
+          <td>Ashok Nagar, Mandya </td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><span class="badge badge-red">High</span></td>
+          <td>Bin Above 80%</td>
+          <td>Hosahalli, Mandya </td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><span class="badge badge-yellow">Medium</span></td>
+          <td>Sensor Failure</td>
+          <td>KSRTC Bus Stand, Mandya </td>
+          <td><span class="badge badge-red">Open</span></td>
+        </tr>
+      </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Collection Efficiency & Waste Analytics charts -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-history"></i> <span data-i18n="col_performance" data-i18n-original="Collection Performance">Collection Performance</span></h3>
+              <div class="waste-chart-widget">
+                <canvas id="chart-collection-efficiency" style="box-sizing: border-box; display: block; height: 220px; width: 542.4px;" width="542" height="220"></canvas>
+              </div>
+            </div>
+
+            <!-- Vehicle Tracking Status -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-shuttle-van"></i> <span data-i18n="active_fleet" data-i18n-original="Active Fleet">Active Fleet</span></h3>
+              <ul class="intro-list" style="gap: 12px;" id="dashboard-fleet-list">
+                <li style="border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+                  <i class="fas fa-truck-moving" style="color:var(--neon-blue);"></i>
+                  <div style="flex:1;">
+                    <div class="title" style="font-size:0.85rem;">TRUCK-KA-10 (<span data-i18n="E-Waste Compactor" data-i18n-original="E-Waste Compactor">E-Waste Compactor</span>)</div>
+                    <p style="font-size:0.75rem;"><span data-i18n="Driver:" data-i18n-original="Driver:">Driver:</span> Rajesh Kumar | <span data-i18n="status:" data-i18n-original="status:">status:</span> <span style="color:var(--neon-blue);" data-i18n="Active Routing" data-i18n-original="Active Routing">Active Routing</span></p>
+                  </div>
+                </li>
+                <li style="border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+                  <i class="fas fa-truck-moving" style="color:var(--neon-blue);"></i>
+                  <div style="flex:1;">
+                    <div class="title" style="font-size:0.85rem;">TRUCK-KA-12 (<span data-i18n="Organic Tipper" data-i18n-original="Organic Tipper">Organic Tipper</span>)</div>
+                    <p style="font-size:0.75rem;"><span data-i18n="Driver:" data-i18n-original="Driver:">Driver:</span> Anil Gowda | <span data-i18n="status:" data-i18n-original="status:">status:</span> <span style="color:var(--neon-blue);" data-i18n="Active Routing" data-i18n-original="Active Routing">Active Routing</span></p>
+                  </div>
+                </li>
+                <li>
+                  <i class="fas fa-truck-moving" style="color:var(--text-muted);"></i>
+                  <div style="flex:1;">
+                    <div class="title" style="font-size:0.85rem;">TRUCK-KA-15 (<span data-i18n="Dry Waste Recycler" data-i18n-original="Dry Waste Recycler">Dry Waste Recycler</span>)</div>
+                    <p style="font-size:0.75rem;"><span data-i18n="Driver:" data-i18n-original="Driver:">Driver:</span> Suresh Naik | <span data-i18n="status:" data-i18n-original="status:">status:</span> <span style="color:var(--text-secondary);" data-i18n="Standby / Idle" data-i18n-original="Standby / Idle">Standby / Idle</span></p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==============================================
+             DIGITAL TWIN 3D VIEW SCREEN
+             ============================================== -->
+        <div class="app-screen" id="digital-twin-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-cube"></i> Digital Twin City View</h2>
+            <p class="screen-subtitle">Simulated 3D IoT network map of Mandya municipal districts.</p>
+          </div>
+
+          <div class="twin-viewport" id="digital-twin-viewport">
+            <div class="twin-sidebar-controls">
+              <button class="sim-btn" onclick="toggleTwinLayer(&#39;normal&#39;)">Connectivity Grid</button>
+              <button class="sim-btn" onclick="toggleTwinLayer(&#39;thermal&#39;)">Thermal Intensity Map</button>
+            </div>
+            <div id="digital-twin-container" style="width:100%; height:100%;"><svg viewBox="0 0 800 500" class="digital-twin-svg" style="width:100%; height:100%;">
+      <!-- Defs for grid patterns and glows -->
+      <defs>
+        <pattern id="twinGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0, 229, 255, 0.08)" stroke-width="1"></path>
+        </pattern>
+        <radialgradient id="nodeGlowRed" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ff3131" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#ff3131" stop-opacity="0"></stop>
+        </radialgradient>
+        <radialgradient id="nodeGlowGreen" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#39ff14" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#39ff14" stop-opacity="0"></stop>
+        </radialgradient>
+      </defs>
+
+      <!-- Background Grid -->
+      <rect width="100%" height="100%" fill="url(#twinGrid)"></rect>
+
+      <!-- Isometric Road Network -->
+      <g transform="translate(100, 50)">
+        <!-- Vertical Roads -->
+        <line x1="100" y1="50" x2="500" y2="350" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"></line>
+        <line x1="200" y1="50" x2="600" y2="350" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"></line>
+        
+        <!-- Horizontal Roads -->
+        <line x1="500" y1="350" x2="100" y2="350" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"></line>
+        <line x1="400" y1="100" x2="50" y2="100" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"></line>
+      </g>
+    
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-01&#39;)" style="cursor:pointer;" data-id="BIN-KA-01">
+          <!-- Glow Circle -->
+          <circle cx="200" cy="130" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="194" y="100" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="194" y="115.9" width="12" height="14.1" rx="3" fill="#39ff14" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="200" y="145" class="twin-label twin-safe" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-01 (47%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-02&#39;)" style="cursor:pointer;" data-id="BIN-KA-02">
+          <!-- Glow Circle -->
+          <circle cx="360" cy="100" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="354" y="70" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="354" y="78.1" width="12" height="21.9" rx="3" fill="#ffd700" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="360" y="115" class="twin-label twin-warning" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-02 (73%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-03&#39;)" style="cursor:pointer;" data-id="BIN-KA-03">
+          <!-- Glow Circle -->
+          <circle cx="520" cy="130" r="35" fill="url(#nodeGlowRed)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="514" y="100" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="514" y="105.4" width="12" height="24.599999999999998" rx="3" fill="#ff3131" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="520" y="145" class="twin-label twin-critical pulsing-twin-text" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-03 (82%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-04&#39;)" style="cursor:pointer;" data-id="BIN-KA-04">
+          <!-- Glow Circle -->
+          <circle cx="200" cy="210" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="194" y="180" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="194" y="202.5" width="12" height="7.5" rx="3" fill="#39ff14" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="200" y="225" class="twin-label twin-safe" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-04 (25%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-05&#39;)" style="cursor:pointer;" data-id="BIN-KA-05">
+          <!-- Glow Circle -->
+          <circle cx="400" cy="240" r="35" fill="url(#nodeGlowRed)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="394" y="210" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="394" y="213.6" width="12" height="26.4" rx="3" fill="#ff3131" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="400" y="255" class="twin-label twin-critical pulsing-twin-text" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-05 (88%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-06&#39;)" style="cursor:pointer;" data-id="BIN-KA-06">
+          <!-- Glow Circle -->
+          <circle cx="560" cy="210" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="554" y="180" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="554" y="205.2" width="12" height="4.8" rx="3" fill="#39ff14" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="560" y="225" class="twin-label twin-safe" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-06 (16%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-07&#39;)" style="cursor:pointer;" data-id="BIN-KA-07">
+          <!-- Glow Circle -->
+          <circle cx="240" cy="350" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="234" y="320" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="234" y="332.9" width="12" height="17.099999999999998" rx="3" fill="#ffd700" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="240" y="365" class="twin-label twin-warning" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-07 (57%)</text>
+        </g>
+      
+        <!-- Bin Node Group -->
+        <g class="twin-node-group" onclick="EcoBinApp.viewBinDetails(&#39;BIN-KA-08&#39;)" style="cursor:pointer;" data-id="BIN-KA-08">
+          <!-- Glow Circle -->
+          <circle cx="400" cy="320" r="35" fill="url(#nodeGlowGreen)" opacity="0.4"></circle>
+          
+          <!-- Isometric Cylinder tower representing waste depth -->
+          <rect x="394" y="290" width="12" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1"></rect>
+          <rect x="394" y="301.7" width="12" height="18.3" rx="3" fill="#ffd700" opacity="0.85"></rect>
+          
+          <!-- Node Label text -->
+          <text x="400" y="335" class="twin-label twin-warning" text-anchor="middle" font-size="9" fill="#fff" font-family="&#39;Outfit&#39;">BIN-KA-08 (61%)</text>
+        </g>
+      
+        <g class="twin-truck-group" transform="translate(250, 320)">
+          <circle cx="0" cy="0" r="8" fill="rgba(0, 229, 255, 0.2)" stroke="#00e5ff" stroke-width="1.5"></circle>
+          <path d="M-4 -3 L4 -3 L4 3 L-4 3 Z" fill="#00e5ff"></path>
+          <text x="0" y="-12" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="&#39;Outfit&#39;">TRUCK-KA-10</text>
+        </g>
+      
+        <g class="twin-truck-group" transform="translate(250, 280)">
+          <circle cx="0" cy="0" r="8" fill="rgba(0, 229, 255, 0.2)" stroke="#00e5ff" stroke-width="1.5"></circle>
+          <path d="M-4 -3 L4 -3 L4 3 L-4 3 Z" fill="#00e5ff"></path>
+          <text x="0" y="-12" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="&#39;Outfit&#39;">TRUCK-KA-12</text>
+        </g>
+      
+        <g class="twin-truck-group" transform="translate(250, 240)">
+          <circle cx="0" cy="0" r="8" fill="rgba(0, 229, 255, 0.2)" stroke="#00e5ff" stroke-width="1.5"></circle>
+          <path d="M-4 -3 L4 -3 L4 3 L-4 3 Z" fill="#00e5ff"></path>
+          <text x="0" y="-12" fill="#00e5ff" font-size="8" text-anchor="middle" font-family="&#39;Outfit&#39;">TRUCK-KA-15</text>
+        </g>
+      </svg></div>
+          </div>
+        </div>
+
+
+
+        <!-- ==============================================
+             MUNICIPAL WORKER MOBILE PANEL SCREEN
+             ============================================== -->
+        <div class="app-screen" id="worker-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-id-badge"></i> Municipal Worker Panel</h2>
+            <p class="screen-subtitle">Simulated mobile app dashboard for field operations.</p>
+          </div>
+
+          <div class="worker-screen-layout">
+            <!-- Phone Shell Layout for Worker Mobile App -->
+            <div class="worker-sidebar-app">
+              <div class="worker-app-header">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <strong>Worker App v1.2</strong>
+                  <span class="status-indicator online" id="worker-status-light"></span>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="worker-status-text">ON-DUTY / ACTIVE</div>
+              </div>
+              <div class="worker-app-content">
+                <div class="phone-app-card">
+                  <div style="font-weight:700;">Active Route Assigned</div>
+                  <div style="font-size:0.75rem; color:var(--neon-blue); margin-top:2px;">TRUCK-KA-10 (Organic Carrier)</div>
+                </div>
+
+                <div class="phone-app-card">
+                  <div style="font-weight:700; margin-bottom:8px;">Worker Tasks</div>
+                  <label class="checkbox-label" style="font-size:0.8rem; display:block; margin-bottom:6px;">
+                    <input type="checkbox" checked=""> Check-in shift details
+                  </label>
+                  <label class="checkbox-label" style="font-size:0.8rem; display:block; margin-bottom:6px;">
+                    <input type="checkbox"> Empty BIN-KA-03 (High Alert)
+                  </label>
+                  <label class="checkbox-label" style="font-size:0.8rem; display:block;">
+                    <input type="checkbox"> Complete return to Depot
+                  </label>
+                </div>
+
+                <button class="btn-primary phone-app-btn checked-in" id="btn-worker-checkin" onclick="toggleWorkerAttendance()">Check-Out Attendance</button>
+              </div>
+            </div>
+
+            <!-- Worker statistics and ratings -->
+            <div class="glass-card" style="display:flex; flex-direction:column; gap:20px;">
+              <h3 class="card-title"><i class="fas fa-star" style="color:var(--neon-yellow);"></i> Worker Performance Matrix</h3>
+              <div class="stats-grid">
+                <div class="glass-card stats-card glow-green">
+                  <div class="stats-header">Rating Grade</div>
+                  <div class="stats-value">4.9 / 5.0</div>
+                  <div class="stats-footer">Excellent worker score</div>
+                </div>
+                <div class="glass-card stats-card glow-blue">
+                  <div class="stats-header">Shift Time</div>
+                  <div class="stats-value">6h 12m</div>
+                  <div class="stats-footer">Current active shift</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             CITIZEN REWARDS SCREEN
+             ============================================== -->
+        <div class="app-screen" id="rewards-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-trophy"></i> Citizen Rewards &amp; Leaderboard</h2>
+            <p class="screen-subtitle">Earn reward points for reporting waste issues and participating in smart city initiatives.</p>
+          </div>
+
+          <div class="dashboard-layout">
+            <!-- User stats cards -->
+            <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 class="card-title"><i class="fas fa-award"></i> Your Contribution Progress</h3>
+                <div class="stats-grid" style="margin-bottom:16px;">
+                  <div class="glass-card stats-card glow-green">
+                    <div class="stats-header">Total Points</div>
+                    <div class="stats-value" id="rewards-points-count">350</div>
+                    <div class="stats-footer">Points for gift card trade</div>
+                  </div>
+                  <div class="glass-card stats-card glow-blue">
+                    <div class="stats-header">Community Score</div>
+                    <div class="stats-value" id="rewards-score-count">88%</div>
+                    <div class="stats-footer">Top 12% in Mandya City</div>
+                  </div>
+                </div>
+                <div style="margin-top:16px;">
+                  <h4 style="font-size:0.9rem; margin-bottom:8px;">Unlocked Badges</h4>
+                  <div id="rewards-badges-box" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="badge badge-blue rewards-badge-item"><i class="fas fa-award"></i> Eco Warrior</span>
+      
+        <span class="badge badge-blue rewards-badge-item"><i class="fas fa-award"></i> First Responder</span>
+      
+        <span class="badge badge-blue rewards-badge-item"><i class="fas fa-award"></i> Bin Spotter</span>
+      </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Citizen Leaderboard table -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-medal" style="color:var(--neon-yellow);"></i> Mandya Citizen Leaderboard</h3>
+              <div class="table-container">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Citizen Name</th>
+                      <th>Total Points</th>
+                      <th>Contribution</th>
+                      <th>Badge Level</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rewards-leaderboard-box">
+        <tr class="">
+          <td><strong>#1</strong></td>
+          <td>Girish Gowda</td>
+          <td>480 pts</td>
+          <td>95%</td>
+          <td><span class="badge badge-yellow">Grandmaster</span></td>
+        </tr>
+      
+        <tr class="">
+          <td><strong>#2</strong></td>
+          <td>Deepa Patil</td>
+          <td>420 pts</td>
+          <td>91%</td>
+          <td><span class="badge badge-gray">Expert</span></td>
+        </tr>
+      
+        <tr class="me-row">
+          <td><strong>#3</strong></td>
+          <td>You (Citizen User)</td>
+          <td>350 pts</td>
+          <td>88%</td>
+          <td><span class="badge badge-gray">Active Citizen</span></td>
+        </tr>
+      
+        <tr class="">
+          <td><strong>#4</strong></td>
+          <td>Vijay M.</td>
+          <td>290 pts</td>
+          <td>82%</td>
+          <td><span class="badge badge-gray">Contributor</span></td>
+        </tr>
+      
+        <tr class="">
+          <td><strong>#5</strong></td>
+          <td>Ashwin K.</td>
+          <td>210 pts</td>
+          <td>75%</td>
+          <td><span class="badge badge-gray">Novice</span></td>
+        </tr>
+      </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ==============================================
+             5. BIN MAP SCREEN
+             ============================================== -->
+        <div class="app-screen" id="map-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-map-marked-alt"></i> <span data-i18n="live_map_title" data-i18n-original="Live Smart Bin Map">Live Smart Bin Map</span></h2>
+            <p class="screen-subtitle" data-i18n="live_map_subtitle" data-i18n-original="GPS mapping of IoT smart dustbins and collection vehicles in Karnataka.">GPS mapping of IoT smart dustbins and collection vehicles in Karnataka.</p>
+          </div>
+
+          <div class="glass-card map-card">
+            <div class="map-filters-bar">
+              <div class="search-filter-inputs">
+                <div class="search-input-wrapper">
+                  <i class="fas fa-search"></i>
+                  <input type="text" id="map-search" class="form-control" placeholder="Search by ID/Area..." data-i18n-placeholder="Search by ID/Area..." data-i18n-original-placeholder="Search by ID/Area...">
+                </div>
+                <div>
+                  <select id="map-filter-status" class="form-control">
+                    <option value="all" data-i18n="All Bins" data-i18n-original="All Bins">All Bins</option>
+                    <option value="red" data-i18n="Critical (&gt;=80%)" data-i18n-original="Critical (&gt;=80%)">Critical (&gt;=80%)</option>
+                    <option value="yellow" data-i18n="Warning (50-79%)" data-i18n-original="Warning (50-79%)">Warning (50-79%)</option>
+                    <option value="green" data-i18n="Safe (&lt;50%)" data-i18n-original="Safe (&lt;50%)">Safe (&lt;50%)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Legend colors -->
+              <div class="btn-group" style="align-items:center; gap:16px; font-size:0.8rem;">
+                <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#39ff14;"></span> <span data-i18n="Safe (0-50%)" data-i18n-original="0-50% (Safe)">0-50% (Safe)</span></span>
+                <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#ffd700;"></span> <span data-i18n="Warning (51-79%)" data-i18n-original="51-79% (Warning)">51-79% (Warning)</span></span>
+                <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#ff3131;"></span> <span data-i18n="Critical (80-100%)" data-i18n-original="80-100% (Critical)">80-100% (Critical)</span></span>
+              </div>
+            </div>
+
+            <!-- Leaflet Viewport -->
+            <div class="map-viewport leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" id="map-viewport" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 20; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="./EcoBin - Smart Waste Management System_files/7617.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-148px, -133px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="0" height="0" viewBox="0 0 0 0" style="transform: translate3d(0px, 0px, 0px);"><g><path class="leaflet-interactive" stroke="#ff3131" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6, 6" fill="none" d="M0 0L0 0"></path></g></svg></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-marker-pane"><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(23px, -72px, 0px); z-index: -72;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(70px, -24px, 0px); z-index: -24;">
+        <div class="marker-dot neon-red pulsing-marker-red"></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-47px, -108px, 0px); z-index: -108;">
+        <div class="marker-dot neon-red pulsing-marker-red"></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(105px, 107px, 0px); z-index: 107;">
+        <div class="marker-dot neon-green "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-105px, 191px, 0px); z-index: 191;">
+        <div class="marker-dot neon-red pulsing-marker-red"></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(151px, -155px, 0px); z-index: -155;">
+        <div class="marker-dot neon-green "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-59px, 24px, 0px); z-index: 24;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-12px, -54px, 0px); z-index: -54;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(-33px, -77px, 0px); z-index: -77;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(-83px, 150px, 0px); z-index: 150;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(38px, -14px, 0px); z-index: -14;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(2.99304e+06px, 1.95008e+06px, 0px) scale(8192);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="http://127.0.0.1:5500/index.html#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="false"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="http://127.0.0.1:5500/index.html#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"></div></div></div>
+          </div>
+        </div>
+
+
+
+        <!-- ==============================================
+             7. BIN DETAILS SCREEN
+             ============================================== -->
+        <div class="app-screen" id="bin-details-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-info-circle"></i> <span data-i18n="smart_bin_details" data-i18n-original="Smart Bin Details">Smart Bin Details</span></h2>
+            <p class="screen-subtitle" data-i18n="bin_details_subtitle" data-i18n-original="Detailed sensor metadata and history for selected IoT bin.">Detailed sensor metadata and history for selected IoT bin.</p>
+          </div>
+
+          <div class="bin-details-grid">
+            
+            <!-- Left: Metadata list -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-microchip"></i> <span data-i18n="telemetry_status" data-i18n-original="Telemetry Status">Telemetry Status</span></h3>
+              
+              <div class="bin-details-meta">
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="Bin ID:" data-i18n-original="Bin ID:">Bin ID:</span>
+                  <span class="meta-val" id="det-bin-id">BIN-KA-03</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="Location:" data-i18n-original="Location:">Location:</span>
+                  <span class="meta-val" id="det-location">Koramangala, Bengaluru</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="gps_coord" data-i18n-original="GPS Coordinate:">GPS Coordinate:</span>
+                  <span class="meta-val" id="det-gps">12.9352, 77.6244</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="Waste Type:" data-i18n-original="Waste Type:">Waste Type:</span>
+                  <span class="meta-val" id="det-waste-type">E-Waste</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="sensor_status" data-i18n-original="Sensor Status:">Sensor Status:</span>
+                  <span class="meta-val" id="det-sensor-status">Active</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="last_emptying" data-i18n-original="Last Emptying:">Last Emptying:</span>
+                  <span class="meta-val" id="det-last-collection">2026-06-06 04:00 PM</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-label" data-i18n="assigned_vehicle_label" data-i18n-original="Assigned Vehicle:">Assigned Vehicle:</span>
+                  <span class="meta-val" id="det-assigned-vehicle">TRUCK-KA-10 (Rajesh Kumar)</span>
+                </div>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="fill-progress-container">
+                <div class="progress-label-wrap">
+                  <span data-i18n="current_volume" data-i18n-original="Current Volume:">Current Volume:</span>
+                  <span id="det-fill-pct">82%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="det-progress-bar" style="width: 82%; background-color: var(--neon-red);"></div>
+                </div>
+              </div>
+
+              <!-- Warning Box (Shows only if >=80% filled) -->
+              <div class="bin-details-warning active" id="det-warning">
+                <i class="fas fa-exclamation-circle"></i>
+                <div>
+                  <strong data-i18n="critical_warning_title" data-i18n-original="Critical Warning: Exceeds 80%">Critical Warning: Exceeds 80%</strong>
+                  <p style="font-size:0.75rem; margin-top:2px;" data-i18n="critical_warning_desc" data-i18n-original="IoT sensor triggered auto-dispatch protocol. Bin marker changed to RED.">IoT sensor triggered auto-dispatch protocol. Bin marker changed to RED.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Historical Chart -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-chart-area"></i> <span data-i18n="historical_trend" data-i18n-original="Historical Fill-Level Trend (7 Days Cycle)">Historical Fill-Level Trend (7 Days Cycle)</span></h3>
+              <div class="chart-viewport">
+                <canvas id="chart-bin-history"></canvas>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==============================================
+             8. ALERTS SCREEN
+             ============================================== -->
+        <div class="app-screen" id="alerts-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-bell"></i> <span data-i18n="alerts_console_title" data-i18n-original="System Alerts Console">System Alerts Console</span></h2>
+            <p class="screen-subtitle" data-i18n="alerts_console_subtitle" data-i18n-original="Log tracking of IoT triggers, overflow risks, and dispatcher workflows.">Log tracking of IoT triggers, overflow risks, and dispatcher workflows.</p>
+          </div>
+
+          <div class="glass-card">
+            <h3 class="card-title"><i class="fas fa-history"></i> <span data-i18n="alert_events_logs" data-i18n-original="Alert Events Logs">Alert Events Logs</span></h3>
+            <div class="table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="alert_id" data-i18n-original="Alert ID">Alert ID</th>
+                    <th data-i18n="alert_type" data-i18n-original="Alert Type">Alert Type</th>
+                    <th data-i18n="loc_bin" data-i18n-original="Location / Bin">Location / Bin</th>
+                    <th data-i18n="priority" data-i18n-original="Priority">Priority</th>
+                    <th data-i18n="trigger_time" data-i18n-original="Trigger Time">Trigger Time</th>
+                    <th data-i18n="assigned_crew" data-i18n-original="Assigned Crew">Assigned Crew</th>
+                    <th data-i18n="Status" data-i18n-original="Status">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="alerts-tbody">
+        <tr>
+          <td><strong>ALT-290</strong></td>
+          <td>Bin Above 80%</td>
+          <td>Subhash Nagar (ID: BIN-KA-02)</td>
+          <td><span class="badge badge-red">High</span></td>
+          <td>Just Now</td>
+          <td>Suresh Naik</td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><strong>ALT-201</strong></td>
+          <td>Bin Above 80%</td>
+          <td>Ashok Nagar, Mandya (BIN-KA-03)</td>
+          <td><span class="badge badge-red">High</span></td>
+          <td>10 mins ago</td>
+          <td>Rajesh Kumar</td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><strong>ALT-202</strong></td>
+          <td>Bin Above 80%</td>
+          <td>Hosahalli, Mandya (BIN-KA-05)</td>
+          <td><span class="badge badge-red">High</span></td>
+          <td>25 mins ago</td>
+          <td>Anil Gowda</td>
+          <td><span class="badge badge-red">Active</span></td>
+        </tr>
+      
+        <tr>
+          <td><strong>ALT-203</strong></td>
+          <td>Sensor Failure</td>
+          <td>KSRTC Bus Stand, Mandya (BIN-KA-08)</td>
+          <td><span class="badge badge-yellow">Medium</span></td>
+          <td>2 hours ago</td>
+          <td>Unassigned</td>
+          <td><span class="badge badge-red">Open</span></td>
+        </tr>
+      </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             9. ROUTE TRACKING SCREEN
+             ============================================== -->
+        <div class="app-screen" id="route-tracking-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-route"></i> <span data-i18n="route_tracking_title" data-i18n-original="Live Route Tracking">Live Route Tracking</span></h2>
+            <p class="screen-subtitle" data-i18n="route_tracking_subtitle" data-i18n-original="Real-time GPS routing of collection vehicle dispatches in Karnataka.">Real-time GPS routing of collection vehicle dispatches in Karnataka.</p>
+          </div>
+
+          <div class="dashboard-layout">
+            
+            <!-- GPS route map -->
+            <div class="glass-card map-card">
+              <div class="map-filters-bar">
+                <span style="font-weight:600; font-size:0.9rem;" data-i18n="map_tracker_bengaluru" data-i18n-original="Map Tracker: Mandya Zone">Map Tracker: Mandya Zone</span>
+                
+                <!-- Route Legend -->
+                <div class="btn-group" style="align-items:center; gap:16px; font-size:0.75rem;">
+                  <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#39ff14;"></span> <span data-i18n="planned_route" data-i18n-original="Planned Route">Planned Route</span></span>
+                  <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#00e5ff;"></span> <span data-i18n="active_route" data-i18n-original="Active Route">Active Route</span></span>
+                  <span style="display:flex; align-items:center; gap:6px;"><span class="legend-dot" style="background:#ff3131;"></span> <span data-i18n="priority_route" data-i18n-original="High Priority Collection Route">High Priority Collection Route</span></span>
+                </div>
+              </div>
+              <div class="map-viewport leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" id="route-map-viewport" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 20; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="./EcoBin - Smart Waste Management System_files/487518.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-169px, -47px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="0" height="0" viewBox="0 0 0 0" style="transform: translate3d(-0.290311px, -0.475036px, 0px) scale(1);"><g><path class="leaflet-interactive" stroke="#ff3131" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6, 6" fill="none" d="M0 0L0 0"></path></g></svg></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-marker-pane"><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-746px, -3820px, 0px); z-index: -3820;">
+        <div class="marker-dot neon-green "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(2237px, -764px, 0px); z-index: -764;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-5220px, -6111px, 0px); z-index: -6111;">
+        <div class="marker-dot neon-red pulsing-marker-red"></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(4474px, 7638px, 0px); z-index: 7638;">
+        <div class="marker-dot neon-green "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-8948px, 12984px, 0px); z-index: 12984;">
+        <div class="marker-dot neon-red pulsing-marker-red"></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(7456px, -9167px, 0px); z-index: -9167;">
+        <div class="marker-dot neon-green "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-5966px, 2291px, 0px); z-index: 2291;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon custom-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -8px; margin-top: -8px; width: 16px; height: 16px; transform: translate3d(-2983px, -2674px, 0px); z-index: -2674;">
+        <div class="marker-dot neon-yellow "></div>
+        <style>
+          .marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          }
+          .marker-dot.neon-green { background: #39ff14; box-shadow: 0 0 12px #39ff14; }
+          .marker-dot.neon-yellow { background: #ffd700; box-shadow: 0 0 12px #ffd700; }
+          .marker-dot.neon-red { background: #ff3131; box-shadow: 0 0 12px #ff3131; }
+          
+          .pulsing-marker-red {
+            animation: marker-pulse-anim 1.2s infinite alternate;
+          }
+          @keyframes marker-pulse-anim {
+            from { transform: scale(1); box-shadow: 0 0 8px #ff3131; }
+            to { transform: scale(1.35); box-shadow: 0 0 20px #ff3131; }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(-2237px, 763px, 0px); z-index: 763;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(-2237px, 763px, 0px); z-index: 763;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div><div class="leaflet-marker-icon truck-leaflet-marker leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -14px; margin-top: -14px; width: 28px; height: 28px; transform: translate3d(-2237px, 763px, 0px); z-index: 763;">
+        <div class="truck-marker">
+          <i class="fas fa-truck"></i>
+        </div>
+        <style>
+          .truck-marker {
+            background: #141821;
+            border: 1.5px solid #00e5ff;
+            color: #00e5ff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+            animation: truck-glow 2s infinite alternate;
+          }
+          @keyframes truck-glow {
+            from { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+            to { box-shadow: 0 0 16px rgba(0, 229, 255, 0.6); }
+          }
+        </style>
+      </div></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(1.91557e+08px, 1.24805e+08px, 0px) scale(524288);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in leaflet-disabled" href="http://127.0.0.1:5500/index.html#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="true"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="http://127.0.0.1:5500/index.html#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"></div></div></div>
+            </div>
+
+            <!-- Route navigation info panel -->
+            <div class="glass-card" id="route-progress-card">
+              <!-- Rendered dynamically in app.js -->
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==============================================
+             10. CITIZEN REPORTS SCREEN (CAMERA ACTIVE)
+             ============================================== -->
+        <div class="app-screen" id="reports-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-camera"></i> <span data-i18n="citizen_rep_title" data-i18n-original="Citizen Reporting Portal">Citizen Reporting Portal</span></h2>
+            <p class="screen-subtitle" data-i18n="citizen_rep_subtitle" data-i18n-original="Capture waste issue photos with GPS coordinate validation to request cleanups.">Capture waste issue photos with GPS coordinate validation to request cleanups.</p>
+          </div>
+
+          <div class="dashboard-layout">
+            
+            <!-- Submission Report Form -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-file-medical"></i> <span data-i18n="file_waste_rep" data-i18n-original="File Waste Report">File Waste Report</span></h3>
+              <form id="form-citizen-report">
+                
+                <div class="intro-grid" style="gap:16px; margin-bottom: 16px;">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label for="rep-name" data-i18n="full_name" data-i18n-original="Full Name">Full Name</label>
+                    <input type="text" id="rep-name" class="form-control" placeholder="Enter name" data-i18n-placeholder="Enter name" required="" data-i18n-original-placeholder="Enter name">
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label for="rep-phone" data-i18n="phone_number" data-i18n-original="Phone Number">Phone Number</label>
+                    <input type="tel" id="rep-phone" class="form-control" placeholder="+91 XXXXX XXXXX" required="">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="rep-location" data-i18n="address" data-i18n-original="Location Address">Location Address</label>
+                  <input type="text" id="rep-location" class="form-control" placeholder="Exact street address, Mandya" data-i18n-placeholder="Exact street address, Mandya" required="" data-i18n-original-placeholder="Exact street address, Mandya">
+                </div>
+
+                <div class="form-group">
+                  <label for="rep-type" data-i18n="issue_cat" data-i18n-original="Waste Issue Category">Waste Issue Category</label>
+                  <select id="rep-type" class="form-control" required="">
+                    <option value="Overflowing Bin" data-i18n="Overflowing Bin" data-i18n-original="Overflowing Bin">Overflowing Bin</option>
+                    <option value="Missed Collection" data-i18n="Missed Collection" data-i18n-original="Missed Collection">Missed Collection</option>
+                    <option value="Damaged Bin" data-i18n="Damaged Bin" data-i18n-original="Damaged Bin">Damaged Bin</option>
+                    <option value="Illegal Dumping" data-i18n="Illegal Dumping" data-i18n-original="Illegal Dumping">Illegal Dumping</option>
+                    <option value="Waste Spillage" data-i18n="Waste Spillage" data-i18n-original="Waste Spillage">Waste Spillage</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="rep-desc" data-i18n="description" data-i18n-original="Description">Description</label>
+                  <textarea id="rep-desc" class="form-control" rows="3" placeholder="Describe the issue, gravity, duration..." data-i18n-placeholder="Describe the issue, gravity, duration..." required="" data-i18n-original-placeholder="Describe the issue, gravity, duration..."></textarea>
+                </div>
+
+                <!-- Camera view column -->
+                <div class="form-group">
+                  <label data-i18n="attach_images" data-i18n-original="Capture / Attach Images">Capture / Attach Images</label>
+                  <div class="camera-wrapper">
+                    <div class="camera-preview-box">
+                      <!-- Live Video -->
+                      <video id="camera-stream" class="camera-video" autoplay="" playsinline=""></video>
+                      
+                      <!-- Hidden canvas for capture processing -->
+                      <canvas id="camera-canvas" class="camera-fallback-canvas"></canvas>
+                      
+                      <!-- Captured Image View -->
+                      <img id="camera-captured-img" class="camera-captured-img" alt="Captured waste snap">
+                      
+                      <!-- Placeholder -->
+                      <div class="camera-placeholder" id="camera-placeholder">
+                        <i class="fas fa-camera"></i>
+                        <div style="font-weight:600; color:var(--text-primary); margin-top:8px;" data-i18n="camera_interface_title" data-i18n-original="Camera Interface">Camera Interface</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="camera_interface_desc" data-i18n-original="Open device camera to capture real-time waste issue photos">Open device camera to capture real-time waste issue photos</div>
+                      </div>
+                    </div>
+
+                    <div class="camera-controls">
+                      <button type="button" class="btn-secondary" id="btn-camera-open"><i class="fas fa-video"></i> <span data-i18n="open_camera" data-i18n-original="Open Camera">Open Camera</span></button>
+                      <button type="button" class="btn-primary" id="btn-camera-capture" style="display: none;"><i class="fas fa-circle"></i> <span data-i18n="capture_photo" data-i18n-original="Capture Photo">Capture Photo</span></button>
+                      <button type="button" class="btn-danger" id="btn-camera-retake" style="display: none;"><i class="fas fa-redo"></i> <span data-i18n="retake" data-i18n-original="Retake">Retake</span></button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Multiple Photo Attachments -->
+                <div class="form-group">
+                  <label for="rep-files" data-i18n="attach_files" data-i18n-original="Attach Multiple Images (Optional)">Attach Multiple Images (Optional)</label>
+                  <input type="file" id="rep-files" class="form-control" accept="image/*" multiple="" style="padding:6px;">
+                  <div class="photo-gallery" id="uploaded-gallery">
+                    <!-- Dynamic attachment thumbnails loaded here -->
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%;"><i class="fas fa-paper-plane"></i> <span data-i18n="submit_rep_btn" data-i18n-original="Submit Incident Report">Submit Incident Report</span></button>
+              </form>
+            </div>
+
+            <!-- Report list tracking -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-tasks"></i> <span data-i18n="track_resolution" data-i18n-original="Tracking Resolution Progress">Tracking Resolution Progress</span></h3>
+              <div class="table-container">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="report_id" data-i18n-original="Report ID">Report ID</th>
+                      <th data-i18n="Category" data-i18n-original="Category">Category</th>
+                      <th data-i18n="Location" data-i18n-original="Location">Location</th>
+                      <th data-i18n="date_logged" data-i18n-original="Date Logged">Date Logged</th>
+                      <th data-i18n="worker" data-i18n-original="Worker">Worker</th>
+                      <th data-i18n="Status" data-i18n-original="Status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reports-tbody">
+        <tr>
+          <td><strong>REP-101</strong></td>
+          <td>Waste Spillage</td>
+          <td>Ashok Nagar 5th Block</td>
+          <td>2026-06-08 10:05 AM</td>
+          <td>Suresh Naik</td>
+          <td><span class="badge badge-blue">In Progress</span></td>
+        </tr>
+      </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==============================================
+             11. DATA ANALYTICS SCREEN
+             ============================================== -->
+        <div class="app-screen" id="analytics-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-chart-bar"></i> <span data-i18n="intelligent_analytics" data-i18n-original="Intelligent Waste Analytics">Intelligent Waste Analytics</span></h2>
+            <p class="screen-subtitle" data-i18n="analytics_subtitle" data-i18n-original="Advanced telemetry charts tracking waste generation trends across municipal areas.">Advanced telemetry charts tracking waste generation trends across municipal areas.</p>
+          </div>
+
+          <div class="charts-grid">
+            
+            <!-- Left column graph -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-chart-line"></i> <span data-i18n="daily_trends" data-i18n-original="Daily Waste Generation Trends (Tons/Day)">Daily Waste Generation Trends (Tons/Day)</span></h3>
+              <div style="height: 280px; width: 100%;">
+                <canvas id="chart-waste-trends" style="box-sizing: border-box; display: block; height: 280px; width: 518.7px;" width="518" height="280"></canvas>
+              </div>
+            </div>
+
+            <!-- Right column graph -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-chart-bar"></i> <span data-i18n="level_distribution" data-i18n-original="Bins Level Distribution">Bins Level Distribution</span></h3>
+              <div style="height: 280px; width: 100%;">
+                <canvas id="chart-fill-levels" style="box-sizing: border-box; display: block; height: 280px; width: 329.1px;" width="329" height="280"></canvas>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top: 24px;">
+            <!-- Area wise waste horizontal bar graph -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-map-pin"></i> <span data-i18n="area_waste_dist" data-i18n-original="Area-Wise Waste Distribution (Mandya Zones)">Area-Wise Waste Distribution (Mandya Zones)</span></h3>
+              <div style="height: 220px; width: 100%;">
+                <canvas id="chart-area-waste" style="box-sizing: border-box; display: block; height: 220px; width: 921.8px;" width="921" height="220"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Analytics Extensions -->
+          <div class="charts-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;">
+            <!-- Peak Waste Hours -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-clock"></i> Peak Waste Load Times</h3>
+              <div style="height: 250px; width: 100%;">
+                <canvas id="chart-peak-hours" style="box-sizing: border-box; display: block; height: 250px; width: 423.9px;" width="423" height="250"></canvas>
+              </div>
+            </div>
+
+            <!-- Smart Recycling Distribution -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-recycle"></i> Waste Category Classification</h3>
+              <div style="height: 250px; width: 100%;">
+                <canvas id="chart-waste-types" style="box-sizing: border-box; display: block; height: 250px; width: 423.9px;" width="423" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="charts-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px;">
+            <!-- Collection Success Rate -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-check-circle"></i> Collection Success Rate</h3>
+              <div style="height: 250px; width: 100%;">
+                <canvas id="chart-success-rate" style="box-sizing: border-box; display: block; height: 250px; width: 423.9px;" width="423" height="250"></canvas>
+              </div>
+            </div>
+
+            <!-- Vehicle Efficiency -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-gas-pump"></i> Fuel &amp; Logistics Optimization</h3>
+              <div style="height: 250px; width: 100%;">
+                <canvas id="chart-vehicle-efficiency" style="box-sizing: border-box; display: block; height: 250px; width: 423.9px;" width="423" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             12. ADMIN CONTROL SCREEN
+             ============================================== -->
+        <div class="app-screen active" id="admin-screen">
+          <div class="screen-header">
+            <h2 class="screen-title"><i class="fas fa-user-cog"></i> <span data-i18n="admin_controls" data-i18n-original="Administrator Controls">Administrator Controls</span></h2>
+            <p class="screen-subtitle" data-i18n="admin_subtitle" data-i18n-original="Provision smart bin hardware, modify alert thresholds, and register staff drivers.">Provision smart bin hardware, modify alert thresholds, and register staff drivers.</p>
+          </div>
+
+          <div class="admin-grid">
+            
+            <!-- Add Bins CRUD form -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-microchip"></i> <span data-i18n="install_dustbin" data-i18n-original="Install New Smart Dustbin">Install New Smart Dustbin</span></h3>
+              <div class="intro-grid" style="gap:16px;">
+                <div class="form-group">
+                  <label for="admin-bin-loc" data-i18n="loc_area" data-i18n-original="Location Area">Location Area</label>
+                  <input type="text" id="admin-bin-loc" class="form-control" placeholder="e.g. VV Nagar, Mandya" data-i18n-placeholder="e.g. VV Nagar, Mandya" data-i18n-original-placeholder="e.g. VV Nagar, Mandya">
+                </div>
+                <div class="form-group">
+                  <label for="admin-bin-type" data-i18n="waste_segment" data-i18n-original="Waste Segment Type">Waste Segment Type</label>
+                  <select id="admin-bin-type" class="form-control">
+                    <option value="Organic" data-i18n="Organic" data-i18n-original="Organic Waste">Organic Waste</option>
+                    <option value="Plastic" data-i18n="Plastic" data-i18n-original="Plastic Recyclables">Plastic Recyclables</option>
+                    <option value="E-Waste" data-i18n="E-Waste" data-i18n-original="E-Waste / Battery">E-Waste / Battery</option>
+                    <option value="Hazardous" data-i18n="Hazardous" data-i18n-original="Hazardous Materials">Hazardous Materials</option>
+                    <option value="Dry Waste" data-i18n="Dry Waste" data-i18n-original="Dry Waste / Paper">Dry Waste / Paper</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-primary" id="admin-add-bin-btn"><i class="fas fa-plus"></i> <span data-i18n="install_hardware_btn" data-i18n-original="Install &amp; Bind IoT Hardware">Install &amp; Bind IoT Hardware</span></button>
+            </div>
+
+            <!-- Add Workers CRUD form -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-user-plus"></i> <span data-i18n="register_worker" data-i18n-original="Register Municipal Worker">Register Municipal Worker</span></h3>
+              <div class="intro-grid" style="gap:16px;">
+                <div class="form-group">
+                  <label for="admin-user-name" data-i18n="worker_name" data-i18n-original="Worker Full Name">Worker Full Name</label>
+                  <input type="text" id="admin-user-name" class="form-control" placeholder="e.g. Anil Gowda" data-i18n-placeholder="e.g. Anil Gowda" data-i18n-original-placeholder="e.g. Anil Gowda">
+                </div>
+                <div class="form-group">
+                  <label for="admin-user-phone" data-i18n="mobile_phone" data-i18n-original="Mobile Phone">Mobile Phone</label>
+                  <input type="tel" id="admin-user-phone" class="form-control" placeholder="+91 XXXXX XXXXX">
+                </div>
+              </div>
+              <button type="button" class="btn-primary" id="admin-add-user-btn"><i class="fas fa-user-check"></i> <span data-i18n="provision_access_btn" data-i18n-original="Provision Worker Access">Provision Worker Access</span></button>
+            </div>
+
+            <!-- System Settings -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-sliders-h"></i> <span data-i18n="system_settings" data-i18n-original="System Settings">System Settings</span></h3>
+              
+              <div class="config-row">
+                <div class="config-info">
+                  <div class="config-title" data-i18n="auto_dispatch" data-i18n-original="Automatic Collection Dispatch">Automatic Collection Dispatch</div>
+                  <div class="config-desc" data-i18n="auto_dispatch_desc" data-i18n-original="Enable driver SMS dispatch automatically on 80% threshold.">Enable driver SMS dispatch automatically on 80% threshold.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settings-sms" checked="">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="config-row">
+                <div class="config-info">
+                  <div class="config-title" data-i18n="auto_routing" data-i18n-original="Auto GPS Route Re-optimization">Auto GPS Route Re-optimization</div>
+                  <div class="config-desc" data-i18n="auto_routing_desc" data-i18n-original="Calculate shortest path on traffic coordinates.">Calculate shortest path on traffic coordinates.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked="">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="config-row">
+                <div class="config-info">
+                  <div class="config-title" data-i18n="alert_threshold_label" data-i18n-original="IoT Alert Fill Threshold (%)">IoT Alert Fill Threshold (%)</div>
+                  <div class="config-desc" data-i18n="alert_threshold_desc" data-i18n-original="Set dustbin fill level criteria to trigger alerts.">Set dustbin fill level criteria to trigger alerts.</div>
+                </div>
+                <input type="number" id="settings-threshold" class="form-control" style="width: 80px;" min="50" max="95" value="80">
+              </div>
+
+              <div class="config-row">
+                <div class="config-info">
+                  <div class="config-title" data-i18n="simulation_interval" data-i18n-original="GPS Simulation Interval (ms)">GPS Simulation Interval (ms)</div>
+                  <div class="config-desc" data-i18n="simulation_interval_desc" data-i18n-original="Speed of IoT levels increments &amp; truck animations.">Speed of IoT levels increments &amp; truck animations.</div>
+                </div>
+                <input type="number" id="settings-gps-interval" class="form-control" style="width: 100px;" step="1000" min="2000" max="15000" value="4000">
+              </div>
+            </div>
+
+            <!-- Provisioned lists -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fas fa-tasks"></i> <span data-i18n="provisioned_sensors" data-i18n-original="Provisioned IoT Bins Sensors">Provisioned IoT Bins Sensors</span></h3>
+              <div class="table-container" style="max-height: 200px; overflow-y:auto;">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="bin_id" data-i18n-original="Bin ID">Bin ID</th>
+                      <th data-i18n="Location" data-i18n-original="Location">Location</th>
+                      <th data-i18n="waste_segment" data-i18n-original="Waste Segment">Waste Segment</th>
+                      <th data-i18n="fill_level" data-i18n-original="Fill Level">Fill Level</th>
+                      <th data-i18n="sensor_status_col" data-i18n-original="Sensor Status">Sensor Status</th>
+                      <th data-i18n="action" data-i18n-original="Action">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-bins-tbody">
+        <tr>
+          <td><strong>BIN-KA-01</strong></td>
+          <td>VV Nagar</td>
+          <td>Organic</td>
+          <td>51%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-01&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-01&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-02</strong></td>
+          <td>Subhash Nagar</td>
+          <td>Plastic</td>
+          <td>81%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-02&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-02&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-03</strong></td>
+          <td>Ashok Nagar</td>
+          <td>E-Waste</td>
+          <td>82%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-03&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-03&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-04</strong></td>
+          <td>Gutalu Road</td>
+          <td>Hazardous</td>
+          <td>27%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-04&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-04&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-05</strong></td>
+          <td>Hosahalli</td>
+          <td>Organic</td>
+          <td>88%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-05&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-05&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-06</strong></td>
+          <td>Kallahalli</td>
+          <td>Paper</td>
+          <td>22%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-06&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-06&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-07</strong></td>
+          <td>Railway Station</td>
+          <td>Dry Waste</td>
+          <td>61%</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-07&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-07&#39;)">Delete</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>BIN-KA-08</strong></td>
+          <td>KSRTC Bus Stand</td>
+          <td>Organic</td>
+          <td>61%</td>
+          <td><span class="badge badge-gray">Offline</span></td>
+          <td>
+            <button class="sim-btn" onclick="EcoBinApp.editBinSensor(&#39;BIN-KA-08&#39;)">Toggle Sensor</button>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteBin(&#39;BIN-KA-08&#39;)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Provisioned workers list -->
+            <div class="glass-card full-grid">
+              <h3 class="card-title"><i class="fas fa-users-cog"></i> <span data-i18n="active_workers" data-i18n-original="Active Registered Workers">Active Registered Workers</span></h3>
+              <div class="table-container">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="worker_name" data-i18n-original="Worker Name">Worker Name</th>
+                      <th data-i18n="contact_phone" data-i18n-original="Contact Phone">Contact Phone</th>
+                      <th data-i18n="allocated_zone" data-i18n-original="Allocated Zone">Allocated Zone</th>
+                      <th data-i18n="network_status" data-i18n-original="Network Status">Network Status</th>
+                      <th data-i18n="action" data-i18n-original="Action">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-users-tbody">
+        <tr>
+          <td><strong>Rajesh Kumar</strong></td>
+          <td>+91 98452 10982</td>
+          <td>Karnataka Zone 1</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteWorker(&#39;Rajesh Kumar&#39;)">Remove</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>Anil Gowda</strong></td>
+          <td>+91 99002 87634</td>
+          <td>Karnataka Zone 1</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteWorker(&#39;Anil Gowda&#39;)">Remove</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>Suresh Naik</strong></td>
+          <td>+91 97413 54321</td>
+          <td>Karnataka Zone 1</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteWorker(&#39;Suresh Naik&#39;)">Remove</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>Manjunath H.</strong></td>
+          <td>+91 98801 32412</td>
+          <td>Karnataka Zone 1</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteWorker(&#39;Manjunath H.&#39;)">Remove</button>
+          </td>
+        </tr>
+      
+        <tr>
+          <td><strong>Kempe Gowda</strong></td>
+          <td>+91 91104 90812</td>
+          <td>Karnataka Zone 1</td>
+          <td><span class="badge badge-green">Active</span></td>
+          <td>
+            <button class="sim-btn danger-btn" onclick="EcoBinApp.deleteWorker(&#39;Kempe Gowda&#39;)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+      
+    </main>
+  </div>
+
+  <!-- ==============================================
+       SMS SIMULATOR POPUP OVERLAY
+       ============================================== -->
+  <div class="sms-modal-overlay" id="sms-modal" style="display: none;">
+    <div class="sms-phone-mockup">
+      <div class="phone-speaker"></div>
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>12:30 PM</span>
+          <div>
+            <i class="fas fa-wifi" style="margin-right:4px;"></i>
+            <i class="fas fa-battery-three-quarters"></i>
+          </div>
+        </div>
+        <div class="phone-header">
+          <i class="fas fa-user-circle"></i>
+          <div class="phone-contact-name" id="sms-contact-name">Suresh Naik (+91 97413 54321)</div>
+        </div>
+        <div class="phone-chat-body">
+          <div class="phone-bubble received">
+            <span id="sms-msg-bubble">EcoBin URGENT IoT ALERT:<br>Bin BIN-KA-02 at Subhash Nagar reached 81% fill level.<br>Dispatch assigned to you.<br>Vehicle: TRUCK-KA-15<br>Respond immediately.</span>
+            <div class="time" id="sms-msg-time">12:01 PM</div>
+          </div>
+        </div>
+        <div class="phone-footer">
+          <input type="text" class="phone-input" placeholder="Text message" data-i18n-placeholder="Text message" disabled="" data-i18n-original-placeholder="Text message">
+          <button class="phone-send-btn"><i class="fas fa-arrow-up"></i></button>
+        </div>
+      </div>
+      <button class="phone-close-btn" onclick="EcoBinApp.closeSmsModal()"><i class="fas fa-check"></i> <span data-i18n="Close SMS" data-i18n-original="Close SMS">Close SMS</span></button>
+    </div>
+  </div>
+
+  <!-- Toast alerts notifications container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ==============================================
+       SMART CITIZEN QR SCANNER MOBILE MOCKUP MODAL
+       ============================================== -->
+  <div class="phone-modal-overlay" id="qr-phone-modal">
+    <div class="phone-mockup-wrap">
+      <div class="phone-notch"></div>
+      <div class="phone-app-screen">
+        <div class="phone-app-header">EcoBin Citizen QR</div>
+        
+        <div class="phone-app-card">
+          <div style="font-weight:700; font-size:1rem; color:var(--neon-blue);" id="qr-bin-id">BIN-KA-03</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="qr-bin-location">Ashok Nagar, Mandya</div>
+        </div>
+
+        <div class="phone-app-card">
+          <div style="font-weight:700; margin-bottom:8px;">Current Fill Status</div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span>Waste Volume</span>
+            <span id="qr-bin-fill">82%</span>
+          </div>
+          <div class="progress-bar-bg" style="height:10px;">
+            <div class="progress-bar-fill" id="qr-bin-fill-bar" style="width: 82%;"></div>
+          </div>
+        </div>
+
+        <div class="phone-app-card">
+          <div style="font-weight:700; margin-bottom:8px;">Report Bin Issue</div>
+          <button class="btn-danger phone-app-btn" id="qr-report-overflow">Report Overflow</button>
+          <button class="btn-secondary phone-app-btn" id="qr-report-damaged">Report Damaged Bin</button>
+        </div>
+
+        <button class="btn-primary" style="margin-top:auto;" onclick="closeQRScanner()">Close Scanner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       VOICE ASSISTANT FAB & PANEL
+       ============================================== -->
+  <div class="voice-fab" onclick="toggleVoiceAssistant()">
+    <i class="fas fa-microphone"></i>
+  </div>
+  <div class="voice-panel" id="voice-panel">
+    <div class="voice-header">
+      <strong>Voice Assistant</strong>
+      <button class="toast-close" onclick="toggleVoiceAssistant()">×</button>
+    </div>
+    <div class="voice-dialogs" id="voice-dialog-logs">
+      <!-- Bubbles load dynamically -->
+    </div>
+    <div class="voice-footer">
+      <input type="text" id="voice-text-input" class="form-control" placeholder="Ask &#39;Which bins are full?&#39;..." onkeydown="if(event.key===&#39;Enter&#39;) triggerVoiceCommand()">
+      <button class="btn-primary" onclick="triggerVoiceCommand()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- External CDNs: Chart.js & Leaflet.js -->
+  <script src="./EcoBin - Smart Waste Management System_files/chart.js.download"></script>
+  <script src="./EcoBin - Smart Waste Management System_files/leaflet.js.download" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Script inclusions -->
+  <script src="./EcoBin - Smart Waste Management System_files/app.js.download"></script>
+  <script src="./EcoBin - Smart Waste Management System_files/map.js.download"></script>
+  <script src="./EcoBin - Smart Waste Management System_files/charts.js.download"></script>
+  <script src="./EcoBin - Smart Waste Management System_files/camera.js.download"></script>
+  <script src="./EcoBin - Smart Waste Management System_files/advanced_features.js.download"></script>
+  <script>
+    // Delay maps setup slightly to give DOM container sizes time to compute
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        EcoBinMap.init();
+      }, 600);
+    });
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>
